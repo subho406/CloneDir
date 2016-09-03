@@ -14,7 +14,6 @@ mbmul=1024*1024
 
 
 def calcdirhash(dirname):
-	print("he")
 	hashdata=""
 	dirs=os.listdir(dirname)
 	for subdirs,dirs,files in os.walk(dirname):
