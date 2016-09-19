@@ -16,10 +16,25 @@ def connecttoengine():
 		print('Error occurred when connecting to CloneDir Engine... Check if Daemon is running.')
 	print('Connected to Engine')
 
+def recvserverreply():
+	if(server.recv(5)==b'#sc#'):    #Wait for reply from server
+		return True		
+	else:
+		print('Error Communicating with server')
+		exit()
 def addnewdirectory(directory):
-	print('Adding new Directory')
-	
-def syncdirectory(directory);
+	hashdata=str.encode(utils.calcdirhash(directory))
+	server.send(b'#hd#')
+	if(recvserverreply()):
+		server.send(str.encode(str(len(hashdata))))
+	if(recvserverreply()):
+		server.send(hashdata)
+	if(recvserverreply()):
+		print('Successfully sent data')
+	while True:
+		print(server.recv(10))
+
+def syncdirectory(directory):
 	print('Syncing Directory')
 
 if __name__ == '__main__':
