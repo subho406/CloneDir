@@ -1,5 +1,5 @@
 """
-Contains all the utilities used by client to calculate hash values of files in a directory
+Contains all the utilities used by client to calculate hash values of files in a directory	
 """
 
 import os

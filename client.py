@@ -22,18 +22,24 @@ def recvserverreply():
 	else:
 		print('Error Communicating with server')
 		exit()
+
+
+
 def addnewdirectory(directory):
-	hashdata=directory+'\n'	
-	hashdata=str.encode(utils.calcdirhash(directory))
+	identifier=open(directory+'.clonedir','w')
 	server.send(b'#hd#')
+	hashdata=str.encode(utils.calcdirhash(directory))
 	if(recvserverreply()):
 		server.send(str.encode(str(len(hashdata))))
 	if(recvserverreply()):
 		server.send(hashdata)
 	if(recvserverreply()):
 		print('Successfully sent data')
-	while True:
-		print(server.recv(10))
+	server.send(b'#id#')
+	identity=server.recv(256).decode("utf-8")
+	identifier.write(identity)
+	identifier.close()
+	server.close()
 
 def syncdirectory(directory):
 	print('Syncing Directory')
