@@ -12,6 +12,7 @@
 		2.1 #filesrequestbegin# <File request goes here> #filesrequestend#
 
 """
+
 import sqlite3
 import socket
 import os
@@ -20,59 +21,50 @@ import math
 dbconn=None
 dbcursor=None
 listener=None
-buffsize=16
-buff=b''
-#Instruction codes
-keywords={b'#hd#':0}
-#Instruction codes end
-readkeyword=True
-readsize=False
-receivedata=False
-datarecvsize=0
-datasize=None
-databuffer=''
+
 def connecttodb():
 	global dbcursor
 	global dbconn
 	dbconn = sqlite3.connect('./engine/engine.db')
 	dbcursor=dbconn.cursor()
 	dbcursor.execute("create table if not exists file_details(filehash varchar2(64) PRIMARY KEY,filename varchar2(256),size int,timestamp varchar2(20));")
-
+def dbcommit():
+	dbconn.commit()
 def insertdata(data):
 	try:
 		dbcursor.execute('insert into file_details values("test5","djjd",2002,"2gdd");')
 	except sqlite3.Error as er:
 		print('Error: '+er.message)
-		
+def createdirectorytable(tablename):
+	try:
+		dbcursor.execute('create table '+tablename+'(')
+	except sqlite3.Error as er:
+		print('Error: '+er.message 
 def connecttoport(port=None):
 	global listener
 	listener=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
 	if os.path.exists( "/tmp/clonedir" ):
   		os.remove( "/tmp/clonedir" )
-	listener.bind("/tmp/clonedir")
+	listener.bind("/tmp/clonedir") server
 
-def checkhashmatch(hashval):
-	if(keywords[b'#hd#']==hashval):
-		readkeyword=False
-		readsize=True
-		return
 	
 
-def findinst():
-	global buff
-	global readkeyword
-	global readsize
-	print(buff)
-	if(buff==b'#hd#'):
-		readkeyword=False
-		readsize=True
-		return True
 
+def adddirectoryrequest(c):
+	c.send(b'#sc#')
+	datasize=int(c.recv(256).decode("utf-8"))
+	c.send(b'#sc#')
+	datarecv=0
+	hashdata=''
+	while datarecv<datasize:
+		data=c.recv(256)
+		datarecv=datarecv+len(data)
+		hashdata=hashdata+data.decode("utf-8")
+	print(hashdata)
+	c.send(b'#sc#')
+	
 
 		
-
-
-
 
 def startdaemon():
 	listener.listen()
@@ -86,39 +78,12 @@ def startdaemon():
 	print('CloneDir Daemon Running...')
 	while True:
 		c,addr=listener.accept()
-		while True:
-			data=c.recv(256)
-			if(data==b''):
-				print('Session closed!')
-				buff=b''
-				c.close()
-				break
-			buff=data 
-			if(readkeyword==True):
-				if(findinst()):
-					c.send(b'#sc#')
-			elif(readsize==True):
-				c.send(b'#sc#')
-				datasize=int(bytes.decode(data))
-				readsize=False
-				receivedata=True
-			elif (receivedata==True):
-				datarecvsize=datarecvsize+len(buff)
-				if(datarecvsize<datasize):
-					databuffer=databuffer+bytes.decode(data)
-				else:
-					c.send(b'#sc#')
-					print(databuffer)
-					databuffer=''
+		if(c.recv(5)==b'#hd#'):
+			adddirectoryrequest(c)
+
+
+		
 				
-				
-
-
-			
-			
-
-			
-
 
 if __name__ == '__main__':
 	connecttodb()
@@ -129,4 +94,5 @@ if __name__ == '__main__':
 		keywords[key]=wordhash
 	connecttoport()
 	startdaemon()
+
 

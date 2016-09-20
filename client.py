@@ -23,6 +23,7 @@ def recvserverreply():
 		print('Error Communicating with server')
 		exit()
 def addnewdirectory(directory):
+	hashdata=directory+'\n'	
 	hashdata=str.encode(utils.calcdirhash(directory))
 	server.send(b'#hd#')
 	if(recvserverreply()):
