@@ -34,11 +34,17 @@ def addnewdirectory(directory):
 	if(recvserverreply()):
 		server.send(hashdata)
 	if(recvserverreply()):
-		print('Successfully sent data')
+		print('Sent file details to engine. Waiting for reply...')
 	server.send(b'#id#')
 	identity=server.recv(256).decode("utf-8")
-	identifier.write(identity)
-	identifier.close()
+	server.send(b'#sc#')
+	numfiles=int(server.recv(256).decode("utf-8"))
+	identifier.write(identity)  #After database has been affected we can write the .clonedir file 
+	identifier.close() 
+	print(str(numfiles)+' files to be uploaded.')
+	server.send(b'#sc#')
+	for i in range(0,numfiles):
+		a=2 #Send each file one by one
 	server.close()
 
 def syncdirectory(directory):

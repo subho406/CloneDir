@@ -20,7 +20,7 @@ def calcdirhash(dirname):
 		subdirs+="/"
 		for f in files:
 			stat=os.stat(subdirs+f)
-			hashdata+=f+"\t"+str(hashvalxx(subdirs+f))+"\t"+subdirs+f+"\t"+str(stat.st_size)
+			hashdata+=f+"\t"+hashvalxx(subdirs+f)+"\t"+subdirs+f+"\t"+str(stat.st_size)
 			hashdata+="\n"
 								
 	return hashdata
@@ -40,5 +40,5 @@ def hashvalxx(file):
 			lim+=100
 		buf=f.read(buflen)
 		filelen+=buflen
-	return val.digest()
+	return val.hexdigest()
 

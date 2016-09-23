@@ -31,6 +31,14 @@ import math
 dbconn=None
 dbcursor=None
 listener=None
+def init():
+	try:
+		dbcursor.execute('create table if not exists xxhashvals(hashvalue primary key,filename text,startpointer text,endpointer int);')
+		print('Setting things for the first time')
+		dbconn.commit()
+	except sqlite3.Error as er:
+		print('Error: '+er.args[0])
+
 def generatedirectoryidentity():
 	if(os.path.exists('./engine/clonedir')):
 		data=open('./engine/clonedir','r')
@@ -58,15 +66,15 @@ def dbcommit():
 	dbconn.commit()
 def insertdata(tablename,data):
 	try:
-		dbcursor.execute('insert into file_details values("test5","djjd",2002,"2gdd");')
+		dbcursor.execute('insert into '+tablename+' values('+data+');')
 	except sqlite3.Error as er:
-		print('Error: '+er.message)
+		print('Error: '+er.args[0])
 def createdirectorytable(tablename):
 	try:
 		dbcursor.execute('create table '+tablename+'(filename text,hashval varchar(80),location text,size int);')
 		dbconn.commit()
 	except sqlite3.Error as er:
-		print('Error: '+er.message)
+		print('Error: '+er.args[0])
 
 def connecttoport(port=None):
 	global listener
@@ -75,6 +83,11 @@ def connecttoport(port=None):
   		os.remove( "/tmp/clonedir" )
 	listener.bind("/tmp/clonedir") 
 
+def recvclientreply(c):
+	if(c.recv(5)==b'#sc#'):    #Wait for reply from server
+		return True		
+	else:
+		print('Client Lost')
 
 def adddirectoryrequest(c):
 	c.send(b'#sc#')
@@ -90,7 +103,9 @@ def adddirectoryrequest(c):
 	val=generatedirectoryidentity()
 	if(c.recv(5)==b'#id#'):
 		c.send(str.encode(val))
+	createdirectorytable(val)
 	hashdata=hashdata.split("\n")
+	neededfiles=[]
 	for h in hashdata:
 		data=h.split('\t')
 		if(len(data)==4):
@@ -98,8 +113,19 @@ def adddirectoryrequest(c):
 			hashvalue=data[1]
 			location=data[2]
 			size=data[3]
-			print(size)
-	createdirectorytable(val)
+			values='"'+filename+'"'+',"'+hashvalue+'"'+',"'+location+'",'+size
+			insertdata(val,values)
+			dbcursor.execute('select * from xxhashvals where hashvalue="'+hashvalue+str(size)+'";')
+			fetchdata=dbcursor.fetchall()
+			if(len(fetchdata)==0):
+				neededfiles.append(h) 
+	dbconn.commit()
+	print('Added a new folder\nThe following files need to be uploaded')
+	print(neededfiles)
+	if(recvclientreply(c)):
+		c.send(str.encode(str(len(neededfiles))))
+		
+	
 	
 
 		
@@ -117,6 +143,7 @@ def startdaemon():
 
 if __name__ == '__main__':
 	connecttodb()
+	init()
 	connecttoport()
 	startdaemon()
 
