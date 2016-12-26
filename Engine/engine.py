@@ -33,11 +33,15 @@ dbcursor=None
 listener=None
 def init():
 	try:
-		dbcursor.execute('create table if not exists xxhashvals(hashvalue primary key,filename text,startpointer text,endpointer int);')
+		if(os.path.exists('./data')==False):
+			os.mkdir('./data')
+		dbcursor.execute('create table xxhashvals(hashvalue text primary key,filename text);')
 		print('Setting things for the first time')
 		dbconn.commit()
+		return 1
 	except sqlite3.Error as er:
 		print('Error: '+er.args[0])
+		return 0
 
 def generatedirectoryidentity():
 	if(os.path.exists('./engine/clonedir')):
@@ -61,6 +65,7 @@ def connecttodb():
 	global dbconn
 	dbconn = sqlite3.connect('./engine/engine.db')
 	dbcursor=dbconn.cursor()
+	return 1
 	#dbcursor.execute("create table if not exists file_details(filehash varchar2(64) PRIMARY KEY,filename varchar2(256),size int,timestamp varchar2(20));")
 def dbcommit():
 	dbconn.commit()
@@ -84,11 +89,79 @@ def connecttoport(port=None):
 	listener.bind("/tmp/clonedir") 
 
 def recvclientreply(c):
-	if(c.recv(5)==b'#sc#'):    #Wait for reply from server
+	if(c.recv(4)==b'#sc#'):    #Wait for reply from server
 		return True		
 	else:
 		print('Client Lost')
+def recvfile(c,f):
+	data=f.split('\t')
+	filename=data[0]
+	hashvalue=data[1]
+	location=data[2]
+	size=int(data[3])
+	recvsize=0
+	savefil=open('./data/'+hashvalue+str(size),'wb')
+	while recvsize<size :
+		buff=c.recv(1024)
+		savefil.write(buff)
+		recvsize=recvsize+len(buff)
+	savefil.close()
+	filedata='"'+hashvalue+str(size)+'","'+filename+'"'
+	insertdata('xxhashvals', filedata)
+	print('recv')
+	c.send(b'#sc#')
 
+def restoredirectoryrequest(c):
+	try:
+		print('Restore Directory Request Received!')
+		c.send(b'#sc#')
+		identity=c.recv(256).decode("utf-8")
+		dbcursor.execute('select * from '+identity+';')
+		filesdata=dbcursor.fetchall()
+		print(filesdata)
+		data=''
+		for f in filesdata:
+			filename=f[0]
+			hashvalue=f[1]
+			location=f[2]
+			size=str(f[3])
+			data=data+'\n'+filename+'\t'+hashvalue+'\t'+location+'\t'+size
+		c.send(b'#sc#')  #Successful generation of the data
+		if(recvclientreply(c)):
+			c.send(str.encode(str(len(data))))
+		if(recvclientreply(c)):
+			c.send(str.encode(data))
+		for f in filesdata:
+			filename=f[0]
+			hashvalue=f[1]
+			location=f[2]
+			size=f[3]
+			recvclientreply(c)
+			print('Sending file '+filename)
+			nextdisplay=0
+			sentsize=0
+			filetosend=open('./data/'+hashvalue+str(size),'rb')
+			while sentsize<size:
+				buff=filetosend.read(1024)
+				c.send(buff)
+				sentsize=sentsize+len(buff)
+				display=int((sentsize/size)*100)
+				if display>=nextdisplay:
+					print('\r '+str(display)+'%',end='')
+					nextdisplay=nextdisplay+1
+			print('\n')
+			filetosend.close()
+			recvclientreply(c)
+		c.close()
+	except:
+		print('\nSome files could not be restored\n')
+		c.close()
+
+
+
+
+
+	
 def adddirectoryrequest(c):
 	c.send(b'#sc#')
 	datasize=int(c.recv(256).decode("utf-8"))
@@ -124,7 +197,14 @@ def adddirectoryrequest(c):
 	print(neededfiles)
 	if(recvclientreply(c)):
 		c.send(str.encode(str(len(neededfiles))))
-		
+	for n in neededfiles:
+		recvclientreply(c)
+		c.send(str.encode(n))
+		recvclientreply(c)
+		c.send(b'#sc#')
+		print(n)
+		recvfile(c,n)
+
 	
 	
 
@@ -135,8 +215,13 @@ def startdaemon():
 	print('CloneDir Daemon Running...')
 	while True:
 		c,addr=listener.accept()
-		if(c.recv(5)==b'#hd#'):
+		recvdata=c.recv(5)
+		if(recvdata==b'#hd#'):
 			adddirectoryrequest(c)
+		elif(recvdata==b'#id#'):
+			restoredirectoryrequest(c)
+
+
 
 
 					

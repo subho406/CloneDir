@@ -1,0 +1,31 @@
+<<<<<Testing Small Directories>>>>>
+
+
+Testing Directory: /home/subho/Documents/Dev/Asm/
+Directory Size: 156071 bytes
+Processed 1 filesProcessed 2 filesProcessed 3 filesProcessed 4 filesProcessed 5 filesProcessed 6 filesProcessed 7 filesProcessed 8 files
+Sent file details to engine. Waiting for reply...
+8 files to be uploaded.
+Execution Time: 0.2153 secs
+--------------------------------
+Testing Directory: /home/subho/Documents/Dev/Architecture/
+Directory Size: 29086 bytes
+Processed 1 filesProcessed 2 filesProcessed 3 filesProcessed 4 filesProcessed 5 filesProcessed 6 filesProcessed 7 filesProcessed 8 filesProcessed 9 filesProcessed 10 filesProcessed 11 filesProcessed 12 filesProcessed 13 filesProcessed 14 filesProcessed 15 filesProcessed 16 filesProcessed 17 filesProcessed 18 filesProcessed 19 files
+Sent file details to engine. Waiting for reply...
+6 files to be uploaded.
+Execution Time: 0.254 secs
+--------------------------------
+Testing Directory: /home/subho/Documents/Dev/Ai/
+Directory Size: 26419 bytes
+Processed 1 filesProcessed 2 filesProcessed 3 filesProcessed 4 filesProcessed 5 filesProcessed 6 filesProcessed 7 filesProcessed 8 filesProcessed 9 filesProcessed 10 filesProcessed 11 filesProcessed 12 files
+Sent file details to engine. Waiting for reply...
+10 files to be uploaded.
+Execution Time: 0.306 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Large Directories>>>>>
+
+
+Testing Directory: /media/subho/01D1AB88AB721F20/Unreal Projects/ShooterGame/
