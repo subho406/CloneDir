@@ -1,0 +1,120 @@
+python3 test_client.py 
+<<<<<Testing Small Directories>>>>>
+
+
+Testing Directory: /home/subho/Documents/Dev/Asm/
+Directory Size: 156071 bytes
+Processed 8 files
+Sent file details to engine. Waiting for reply...
+8 files to be uploaded.
+Execution Time: 0.252 secs
+--------------------------------
+Testing Directory: /home/subho/Documents/Dev/Architecture/
+Directory Size: 29086 bytes
+Processed 19 files
+Sent file details to engine. Waiting for reply...
+6 files to be uploaded.
+Execution Time: 0.4178 secs
+--------------------------------
+Testing Directory: /home/subho/Documents/Dev/Ai/
+Directory Size: 26419 bytes
+Processed 12 files
+Sent file details to engine. Waiting for reply...
+10 files to be uploaded.
+Execution Time: 0.4012 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Large Directories>>>>>
+
+
+Testing Directory: /media/subho/01D1AB88AB721F20/Unreal Projects/ShooterGame/
+Directory Size: 2232982663 bytes
+Processed 1648 files
+Sent file details to engine. Waiting for reply...
+1637 files to be uploaded.
+Execution Time: 40.665 secs
+--------------------------------
+Testing Directory: /media/subho/01D1AB88AB721F20/Unreal Projects/MyProject/
+Directory Size: 351246605 bytes
+Processed 381 files
+Sent file details to engine. Waiting for reply...
+355 files to be uploaded.
+Execution Time: 23.0059 secs
+--------------------------------
+Testing Directory: /media/subho/01D1AB88AB721F20/Unity Workshop/Unity Setup/
+Directory Size: 888778555 bytes
+Processed 5 files
+Sent file details to engine. Waiting for reply...
+4 files to be uploaded.
+Execution Time: 29.782 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Music Directories>>>>>
+
+
+Testing Directory: /media/subho/DCF8DB58F8DB300E/Music/Music/Lamb of god/
+Directory Size: 212999109 bytes
+Processed 47 files
+Sent file details to engine. Waiting for reply...
+46 files to be uploaded.
+Execution Time: 15.6893 secs
+--------------------------------
+Testing Directory: /media/subho/DCF8DB58F8DB300E/Music/Music/AC DC/
+Directory Size: 13175666 bytes
+Processed 12 files
+Sent file details to engine. Waiting for reply...
+11 files to be uploaded.
+Execution Time: 3.1406 secs
+--------------------------------
+Testing Directory: /media/subho/DCF8DB58F8DB300E/Music/Music/METALLICA/
+Directory Size: 51936604 bytes
+Processed 20 files
+Sent file details to engine. Waiting for reply...
+19 files to be uploaded.
+Execution Time: 2.3776 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Document Directories>>>>>
+
+
+Testing Directory: /home/subho/Documents/Vit/
+Directory Size: 8448306 bytes
+Processed 17 files
+Sent file details to engine. Waiting for reply...
+16 files to be uploaded.
+Execution Time: 1.8965 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Video Directories>>>>>
+
+
+Testing Directory: /media/subho/DCF8DB58F8DB300E/movies/mirrors 2/
+Directory Size: 1679190929 bytes
+Processed 4 files
+Sent file details to engine. Waiting for reply...
+3 files to be uploaded.
+Execution Time: 88.7235 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
+
+<<<<<Testing Image Directories>>>>>
+
+
+Testing Directory: /home/subho/Pictures/
+Directory Size: 1198729 bytes
+Processed 37 files
+Sent file details to engine. Waiting for reply...
+36 files to be uploaded.
+Execution Time: 23.7853 secs
+--------------------------------
+<<<<<End Testing>>>>>
+
