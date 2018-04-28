@@ -22,7 +22,7 @@ To run the CloneDir Client use the following command on a directory you want to 
 python3 client.py MODE
 ```
 
-** Available Modes **
+**Available Modes**
 1. -add - Add this directory for backup. This is run for the first time when a directory is initialised as a backup directory.
 2. -sync - Synchronise changes in this directory. This is run on an existing backed up directory.
 3. -restore - Restore an existing backed up directory.
